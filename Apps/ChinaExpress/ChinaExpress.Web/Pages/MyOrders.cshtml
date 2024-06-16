@@ -1,0 +1,86 @@
+﻿@page
+@using ChinaExpress.SimpleEntityModels.Enums
+@model ChinaExpress.Web.Pages.MyOrdersModel
+@{
+    ViewData["Title"] = "Orders";
+}
+
+
+<section class="page-content">
+    <h1 class="text-center">Orders</h1>
+    <table class="table table-striped text-center ligh-shadow">
+        <thead class="thead-custom">
+        <tr>
+            <th scope="col" class="w-5">Order #</th>
+            <th scope="col" class="w-15">Items in order</th>
+            <th scope="col" class="w-15">Delivery Address</th>
+            <th scope="col" class="w-10">Total Price</th>
+            <th scope="col" class="w-10">Status</th>
+
+            <th scope="col" class="w-10">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <th class="w-5">@order.Id</th>
+                <th class="w-15">
+                    <em>@string.Join(", ", order.GetOrderItems().Select(oi => oi.Product.Name))</em>
+                </th>
+                <th class="w-15">@order.Address</th>
+                <th class="w-10">@(order.GetTotalPrice().ToString("f2")) $</th>
+                <th class="w-10">@Html.Raw(order.GetOrderStatusText())</th>
+                <th class="w-10 text-center">
+                    <button class="btn btn-sm btn-primary external-open" data-order-id="@order.Id">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                    @if (order.OrderStatus == OrderStatus.Sent)
+                    {
+                        <button class="btn btn-sm btn-success confirm-order" data-order-id="@order.Id">
+                            <i class="fa-solid fa-check"> Confirm</i>
+                        </button>
+                    }
+                </th>
+            </tr>
+        }
+        </tbody>
+    </table>
+</section>
+
+<script>
+$(".external-open").on("click", function(){
+    const orderId = $(this).attr("data-order-id");
+    window.open(`/Order/${orderId}`, "_blank");
+});
+
+$(".confirm-order").on("click", function(){
+    let model = {
+        OrderId: +$(this).attr("data-order-id")
+    };
+
+    $.ajax({
+    type: "POST",
+    url: "/ConfirmOrder",
+    data: JSON.stringify(model),
+    dataType: "json",
+    success: function (response) {
+        $(this).hide();
+        Swal.fire(
+                'Success!',
+                'Order confirmed succesfully!',
+                'success'
+            ).then(()=> window.location.reload());
+    },
+    error: function (event, jqxhr, settings, thrownError) {
+        if (event.status != 200) {
+            Swal.fire(
+                'Error!',
+                event.responseText.split(': ')[1].split("\r\n")[0],
+                'error'
+            );
+        }
+       }
+    });
+});
+</script>

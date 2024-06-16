@@ -1,0 +1,94 @@
+﻿@page
+@model ChinaExpress.Web.Pages.CouponGameModel
+@{
+    ViewData["Title"] = "Coupon Game";
+}
+
+<link rel="stylesheet" href="~/css/game.css" asp-append-version="true" />
+
+<section class="page-content text-center">
+    <h2 class="text-bold mt-2">Win coupons!</h2>
+    <p class="mt-1" style="font-size: 18px">Find the hidden coin in one of the cups!</p>
+    
+    <div class="image-container">
+        <img class="cursor-pointer" src="https://i.ibb.co/jwYT1D9/red-plastic-cup-isolated-white-beer-pong-game-254359396-removebg-preview.png" alt="Cup Image 1">
+        <img class="cursor-pointer" src="https://i.ibb.co/jwYT1D9/red-plastic-cup-isolated-white-beer-pong-game-254359396-removebg-preview.png" alt="Cup Image 2">
+        <img class="cursor-pointer" src="https://i.ibb.co/jwYT1D9/red-plastic-cup-isolated-white-beer-pong-game-254359396-removebg-preview.png" alt="Cup Image 3">
+    </div>
+    <button class="btn btn-success m-auto" style="font-size: 20px" onclick="shuffleImages()">START GAME</button>
+</section>
+
+<script>
+    let gameHasPlayed = false;
+    window.winChance = 0.10;
+
+    function tenPercentChange() {
+    return Math.random() < window.winChance;
+    }
+
+    function getRandomCode(){
+        var allCodes = JSON.parse('@Html.Raw(@Json.Serialize(Model.Codes))');
+
+        let randomIndex = Math.floor(Math.random() * allCodes.length);
+        return allCodes[randomIndex];
+    } 
+
+    $("img").on("click", function(){
+        if(!gameHasPlayed){
+        Swal.fire(
+            'Start the game before choosing a cup!',
+            '',
+            'warning'
+            )
+        }else{
+            gameHasPlayed = false;
+            $(".btn").show();
+            
+            if(tenPercentChange()){
+                let code = getRandomCode();
+                Swal.fire(
+            'You Win!',
+            `Congratulations! You win the code: <b> ${code} </b> . Add it to your cart to check the discount!`,
+            'success'
+            ).then(() => window.location.href = '/Order');
+            }else{
+                 Swal.fire(
+                'Sorry, you did not win!',
+                'Try again to increase your chances!',
+                'error'
+            );
+            }
+        }
+    });
+
+    function checkStoppedShiffling(){
+        if($('shiffling').length == 0){
+            return true;
+        }
+
+        return false;
+    }
+
+    function shuffleImages() {
+        gameHasPlayed = true;
+        $(".btn").hide();
+
+        const container = document.querySelector('.image-container');
+        const images = Array.from(container.getElementsByTagName('img'));
+
+        images[0].classList.add('shuffling', 'shuffling-1');
+        images[1].classList.add('shuffling', 'shuffling-2');
+        images[2].classList.add('shuffling', 'shuffling-3');
+
+        setTimeout(() => {
+            images.forEach((img, index) => {
+                setTimeout(() => {
+                    img.classList.remove('shuffling', 'shuffling-1', 'shuffling-2', 'shuffling-3');
+
+                    setTimeout(()=> checkStoppedShiffling(), 3000);
+                }, index * 900); 
+            });
+             
+        }, 3500);  
+    }
+    </script>

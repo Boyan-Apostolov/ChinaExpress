@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChinaExpress.Extensions\ChinaExpress.Extensions.csproj" />
+    <ProjectReference Include="..\ChinaExpress.Logic\ChinaExpress.Logic.csproj" />
+    <ProjectReference Include="..\ChinaExpress.ServiceModels\ChinaExpress.DTOs.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Components\ProductCard\Default.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Components\ProductCard\Default.cshtml" />
+  </ItemGroup>
+
+</Project>

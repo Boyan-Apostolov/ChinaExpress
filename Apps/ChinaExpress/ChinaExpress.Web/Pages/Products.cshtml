@@ -1,0 +1,139 @@
+﻿@page
+
+@model ChinaExpress.Web.Pages.ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<style>
+        
+</style>
+<section class="page-content">
+    <input type="hidden" class="keyword" value="@Model.Keyword">
+    <input type="hidden" class="current-page" value="@Model.CurrentPage">
+    
+    @if (!Model.RecommendationMode)
+    {
+        <div class="sidebar">
+            <h1>Filtering</h1>
+            
+            @if (@User.Identity?.IsAuthenticated ?? false)
+            {
+                <button class="btn btn-success recommendation-btn">Find me something</button>
+            }
+            
+            <hr/>
+            <h2>Categories</h2>
+            @foreach (var category in Model.AvailableCategories)
+            {
+                <div class="category">
+                    <label for="@category.Id">
+                        <input type="checkbox" class="category" id="@category.Id" name="@category.Id" value="@category.Id" checked="@Model.Category.Contains(category.Id)"> @category.Name
+                    </label>
+                </div>
+            }
+            <hr/>
+            <h2>Rating</h2>
+            @for (var i = 1; i <= 5; i++)
+            {
+                <div class="rating">
+                    <label for="rating-@i">
+                        <input type="checkbox" class="rating" id="rating-@i" name="rating-@i" value="@i" style="color: gold" checked="@Model.Rating.Contains(i)">
+                        @for (var k = 1; k <= i; k++)
+                        {
+                            <i class='fa-solid fa-star'></i>
+                        }
+                    </label>
+                </div>
+            }
+            <hr/>
+
+            @* <h2>Sort Price</h2>
+        <div class="category">
+            <label for="price-asc">
+                <input type="radio" id="price-asc" class="price" name="price" value="ASC" checked="@((Model.Sort ?? "").ToUpper() == "ASC")"> ASC
+            </label>
+        </div>
+        <div class="category">
+            <label for="price-desc">
+                <input type="radio" id="price-desc" class="price" name="price" value="DESC" checked="@((Model.Sort ?? "").ToUpper() == "DESC")"> DESC
+            </label>
+        </div>
+        <hr/> *@
+
+        </div>
+    }
+
+    <div style="@(!Model.RecommendationMode ? "position: relative; left: 12%;" : "")" class="w-95">
+        @if (!string.IsNullOrWhiteSpace(Model.Keyword))
+        {
+            <h1 class="text-center">Search results for: '@Model.Keyword'</h1>
+        }
+        else
+        {
+            <h1 class="text-center">@(Model.RecommendationMode ? "Recommended " : "")Products:</h1>
+        }
+        @if (Model.Products.Any())
+        {
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Product navigation">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            var isOnCurrentPage = i == Model.CurrentPage;
+                            <li class="page-item @( isOnCurrentPage ? "active" : "")">
+                                <a class="page-link @( isOnCurrentPage ? "" : "text-black")" href="#">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+
+            <div class="items d-flex justify-content-center">
+                @foreach (var product in Model.Products)
+                {
+                    @await Component.InvokeAsync("ProductCard", product)
+                }
+            </div>
+        }
+        else
+        {
+            <h1 class="text-center">No products found</h1>
+        }
+    </div>
+    
+    
+</section>
+
+<script>
+    function getFilterQuery(activePageNumber, recommendationMode){
+        let filterQueries = [];
+         $('input:checked').each((i, el)=>{
+         el = $(el);
+         if(el.hasClass("category")){
+             filterQueries.push(`category=${el.val()}`);
+         } else if(el.hasClass("rating")){
+             filterQueries.push(`rating=${el.val()}`);
+         } else if(el.hasClass("price")){
+              filterQueries.push(`sort=${el.val()}`);
+         }
+         });
+
+         filterQueries.push(`currentPage=${activePageNumber}`);
+         filterQueries.push(`recommendationMode=${recommendationMode}`);
+         return `/Products?keyword=${$(".keyword").val()}&${filterQueries.join("&")}`;
+
+    }
+$(".sidebar input").on("change", function(){
+    window.location.href = getFilterQuery($("current-page").val());
+});
+
+$(".page-link").on("click", function(){
+    window.location.href = getFilterQuery($(this).text());
+});
+
+$(".recommendation-btn").on("click", function(){
+    window.location.href = getFilterQuery(1, true);
+});
+</script>

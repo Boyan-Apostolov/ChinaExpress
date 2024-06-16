@@ -1,0 +1,106 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.Desktop", "ChinaExpress\ChinaExpress.Desktop.csproj", "{FFB74A04-5D6D-4B32-BF6E-9D68728EAAA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.DataAccess", "ChinaExpress.Models\ChinaExpress.DataAccess.csproj", "{E63EB91D-7D0D-4894-83C3-525591C7AAED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.Logic", "ChinaExpress.Logic\ChinaExpress.Logic.csproj", "{AF0559CC-FDDA-47A9-8405-6D865A91678B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.Web", "ChinaExpress.Web\ChinaExpress.Web.csproj", "{8433DEF8-BDE5-4E10-9F00-F27A100D33D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.SimpleEntityModels", "ChinaExpress.DatabaseModels\ChinaExpress.SimpleEntityModels.csproj", "{76FDBCD0-F926-4BE7-BB6C-A14CE59F1232}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.DTOs", "ChinaExpress.ServiceModels\ChinaExpress.DTOs.csproj", "{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.Extensions", "ChinaExpress.Extensions\ChinaExpress.Extensions.csproj", "{E7A4C622-6222-4B40-A479-A6F3D69BBCF8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.Tests", "ChinaExpress.Tests\ChinaExpress.Tests.csproj", "{85EA81D9-7BC5-4DE5-BD25-9FD0A7C919A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D} = {7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}
+		{AF0559CC-FDDA-47A9-8405-6D865A91678B} = {AF0559CC-FDDA-47A9-8405-6D865A91678B}
+		{E7A4C622-6222-4B40-A479-A6F3D69BBCF8} = {E7A4C622-6222-4B40-A479-A6F3D69BBCF8}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.InternalHelpersSimpleModels", "InternalEntityManagementHelpers\ChinaExpress.InternalHelpersSimpleModels.csproj", "{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.ComplexModelsWithoutHelperReferences", "ChinaExpress.ComplexEntityModels\ChinaExpress.ComplexModelsWithoutHelperReferences.csproj", "{5546C6BB-3ED7-4C07-8500-6E957A68F6E2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.ComplexModelsWithHelperReferences", "ChinaExpress.ComplexModelsWithHelperReferences\ChinaExpress.ComplexModelsWithHelperReferences.csproj", "{DE7B1FB6-C907-4E7B-9961-00E1314353E4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InternalManagementHelpers", "InternalManagementHelpers", "{9B5FF717-808D-4029-9FAF-FEFC1FA77EEF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedComplexEntityModelsWithNestedCollections", "SharedComplexEntityModelsWithNestedCollections", "{9857AFEC-E98A-4F2F-88E0-9640E31BCA77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChinaExpress.InternalHelpersComplexModels", "ChinaExpress.pickName\ChinaExpress.InternalHelpersComplexModels.csproj", "{21D98229-94F0-405D-894C-D5F01278530C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFB74A04-5D6D-4B32-BF6E-9D68728EAAA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFB74A04-5D6D-4B32-BF6E-9D68728EAAA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFB74A04-5D6D-4B32-BF6E-9D68728EAAA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFB74A04-5D6D-4B32-BF6E-9D68728EAAA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E63EB91D-7D0D-4894-83C3-525591C7AAED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E63EB91D-7D0D-4894-83C3-525591C7AAED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E63EB91D-7D0D-4894-83C3-525591C7AAED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E63EB91D-7D0D-4894-83C3-525591C7AAED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0559CC-FDDA-47A9-8405-6D865A91678B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0559CC-FDDA-47A9-8405-6D865A91678B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0559CC-FDDA-47A9-8405-6D865A91678B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0559CC-FDDA-47A9-8405-6D865A91678B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8433DEF8-BDE5-4E10-9F00-F27A100D33D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8433DEF8-BDE5-4E10-9F00-F27A100D33D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8433DEF8-BDE5-4E10-9F00-F27A100D33D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8433DEF8-BDE5-4E10-9F00-F27A100D33D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76FDBCD0-F926-4BE7-BB6C-A14CE59F1232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76FDBCD0-F926-4BE7-BB6C-A14CE59F1232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76FDBCD0-F926-4BE7-BB6C-A14CE59F1232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76FDBCD0-F926-4BE7-BB6C-A14CE59F1232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE44D20-94E8-4FCF-B30D-5F6AD468A69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7A4C622-6222-4B40-A479-A6F3D69BBCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7A4C622-6222-4B40-A479-A6F3D69BBCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7A4C622-6222-4B40-A479-A6F3D69BBCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7A4C622-6222-4B40-A479-A6F3D69BBCF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85EA81D9-7BC5-4DE5-BD25-9FD0A7C919A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85EA81D9-7BC5-4DE5-BD25-9FD0A7C919A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85EA81D9-7BC5-4DE5-BD25-9FD0A7C919A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85EA81D9-7BC5-4DE5-BD25-9FD0A7C919A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5546C6BB-3ED7-4C07-8500-6E957A68F6E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5546C6BB-3ED7-4C07-8500-6E957A68F6E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5546C6BB-3ED7-4C07-8500-6E957A68F6E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5546C6BB-3ED7-4C07-8500-6E957A68F6E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE7B1FB6-C907-4E7B-9961-00E1314353E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE7B1FB6-C907-4E7B-9961-00E1314353E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE7B1FB6-C907-4E7B-9961-00E1314353E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE7B1FB6-C907-4E7B-9961-00E1314353E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21D98229-94F0-405D-894C-D5F01278530C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21D98229-94F0-405D-894C-D5F01278530C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21D98229-94F0-405D-894C-D5F01278530C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21D98229-94F0-405D-894C-D5F01278530C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB71807A-E6AA-4177-B9FD-DFBAC12ED3E7} = {9B5FF717-808D-4029-9FAF-FEFC1FA77EEF}
+		{5546C6BB-3ED7-4C07-8500-6E957A68F6E2} = {9857AFEC-E98A-4F2F-88E0-9640E31BCA77}
+		{DE7B1FB6-C907-4E7B-9961-00E1314353E4} = {9857AFEC-E98A-4F2F-88E0-9640E31BCA77}
+		{21D98229-94F0-405D-894C-D5F01278530C} = {9B5FF717-808D-4029-9FAF-FEFC1FA77EEF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E11F0CD-6A28-44AE-8279-A9E9D706B786}
+	EndGlobalSection
+EndGlobal

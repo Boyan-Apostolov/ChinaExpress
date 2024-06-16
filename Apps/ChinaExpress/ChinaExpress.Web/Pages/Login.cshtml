@@ -1,0 +1,48 @@
+﻿@page
+@model ChinaExpress.Web.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+<section class="page-content">
+    
+    @if (!string.IsNullOrWhiteSpace(Model.FormData.Message))
+    {
+        <div class="alert alert-danger w-50 m-auto" role="alert">
+            @Model.FormData.Message
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" asp-for="FormData.Message">
+        <div class="wrapper">
+            <div class="login-logo">
+                <img src="~/images/logo.png" alt="">
+            </div>
+            <div class="text-center mt-4 name">
+                Login
+            </div>
+            <div class="p-3 mt-3">
+                <span asp-validation-for="FormData.Email" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="far fa-envelope"></span>
+                    <input type="text" asp-for="FormData.Email" placeholder="Email">
+                </div>
+                
+                <span asp-validation-for="FormData.Password" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-key"></span>
+                    <input type="password" asp-for="FormData.Password" placeholder="Password">
+                </div>
+                
+                <button class="btn mt-3" type="submit">Login</button>
+            </div>
+            <div class="text-center fs-6">
+                <a asp-area="" asp-page="/Register">Sign up</a>
+            </div>
+        </div>
+    </form>
+</section>
+
+<partial name="_ValidationScriptsPartial"/>

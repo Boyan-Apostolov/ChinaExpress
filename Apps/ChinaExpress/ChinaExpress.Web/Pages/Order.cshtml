@@ -1,0 +1,326 @@
+﻿@page "/Order/{id:int?}"
+@using ChinaExpress.SimpleEntityModels.Enums
+@model ChinaExpress.Web.Pages.CartModel
+@{
+    var pageTitle = Model.IsNewOrder ? "Your Cart" : $"Order #{Model.Order.Id}";
+    ViewData["Title"] = pageTitle;
+    var hasAppliedDiscount = Model.Order.DiscountStrategy != null;
+    var priceWithoutDscount = 0m;
+}
+
+<style>
+    tbody td{
+        height: 150px;
+    }
+
+    .total-tr td{
+        height: 80px;
+        vertical-align: middle;
+    }
+
+    .total-holder{
+        font-size: 20px;
+    }
+</style>
+
+<section class="page-content align-items-center">
+    <h1 class="text-center">@pageTitle @(Model.IsNewOrder ? "" : Html.Raw(Model.Order.GetOrderStatusText()))</h1>
+    <input type="hidden" class="order-id" value="@Model.Order.Id"/>
+
+    @if (!Model.Order.GetOrderItems().Any())
+    {
+        <h2 class="text-center">Your cart is empty!</h2>
+    }
+    else
+    {
+        <table class="table table-striped ligh-shadow">
+        <thead class="thead-custom">
+        <tr class="text-center">
+            <th scope="col" class="w-5">#</th>
+            <th scope="col">Image</th>
+            <th scope="col">Details</th>
+            <th scope="col" class="w-10">Price</th>
+            <th scope="col" class="w-10">Quantity</th>
+            <th scope="col" class="w-10">Subtotal</th>
+            <th scope="col" class="w-10">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0; i < Model.Order.GetOrderItems().Count; i++)
+        {
+            var currentItem = Model.Order.GetOrderItems().ToArray()[i];
+           @(priceWithoutDscount += currentItem.Product.GetPrice() * currentItem.Quantity)
+
+            <tr>
+                <input type="hidden" class="product-id" value="@currentItem.Product.ProductId"/>
+                <th class="w-5">@(i + 1)</th>
+                <td> <img class="card-image card-iamge-small" src="@currentItem.Product.PhotoUrl"/></td>
+                <td class="d-flex flex-column">
+                    <span class="text-bold">
+                        @currentItem.Product.Name
+                        @if (currentItem.SelectedTags.Any())
+                        {
+                            <span style="color: purple">( @string.Join(", ", currentItem.SelectedTags) )</span>
+                        }
+                    </span>
+                    <span>@currentItem.Product.Description</span>
+                </td>
+                <th class="w-10 text-center">
+                    <span class="price">@(currentItem.Product.GetPrice().ToString("F2")) $</span>
+                </th>
+                <th class="w-10 text-center">
+                    @if (Model.IsNewOrder)
+                    {
+                    <button class="btn btn-sm btn-danger change-quantity-btn">-</button>
+                        <span class="mlr-10 quantity-holder">@currentItem.Quantity</span>
+                    <button class="btn btn-sm btn-success change-quantity-btn">+</button>
+                    }
+                    else
+                    {
+                        <span class="mlr-10 quantity-holder">@currentItem.Quantity</span>
+                    }
+                    
+                </th>
+                <th class="w-10 text-center">
+                    <span class="subtotal">
+                        @((currentItem.Quantity * currentItem.Product.GetPrice()).ToString("F2")) $
+                    </span>
+                </th>
+                <th class="w-10 text-center">
+                    <button class="btn btn-sm btn-primary external-open" data-product-id="@currentItem.Product.ProductId">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </button>
+                    @if (Model.IsNewOrder)
+                    {
+                        <button class="btn btn-sm btn-danger change-quantity-btn delete-btn">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    }
+                    @if(currentItem.Review == null && !Model.IsNewOrder && Model.Order.OrderStatus == OrderStatus.Finished)
+                    {
+                        <button class="btn btn-sm review-btn" data-order-item-id="@currentItem.Id" style="background: gold;" title="Add Review">
+                            <i class="fa-solid fa-star"></i>
+                        </button>
+                    }
+                </th>
+            </tr>
+        }
+        @if (Model.Order.GetOrderItems().Any())
+        {
+            <tr class="total-tr text-center">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-bold total-holder">
+                    @if (hasAppliedDiscount)
+                    {
+                        <span class="text-danger">Old Total:</span>
+                    }
+                    <span class="@(hasAppliedDiscount ? "text-success" : "")">Total:</span>
+                </td>
+                <td class="total-holder">
+                    @if (hasAppliedDiscount)
+                    {
+                        <span class="text-danger">@priceWithoutDscount.ToString("F2") $</span>
+                        <br>
+                    }
+                    
+                    <span class="total-price text-bold @(hasAppliedDiscount ? "text-success" : "")">@(Model.Order.GetTotalPrice().ToString("F2")) $</span>
+                </td>
+                <td>
+                    @if (Model.IsNewOrder && Model.Order.DiscountStrategy == null)
+                    {
+                        <button type="button" class="btn btn-success apply-discount-btn">
+                            <i class="fa-percent fa-percent"></i>
+                            <b> Apply discount </b>
+                        </button>
+                    }
+                    @if (hasAppliedDiscount)
+                    {
+                        <b class="text-success">Code: @Model.Order.DiscountStrategy.Code</b>
+                    }
+                </td>
+                <td>
+                    @if (Model.IsNewOrder)
+                    {
+                        <div class="spinner-border spinner" style="display: none" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+
+                        <button type="button" class="btn btn-primary checkout-btn">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <b> Checkout </b>
+                        </button>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    }
+    
+   
+</section>
+
+                    
+<script>
+$(".checkout-btn").on("click", function(){
+    let model = {
+        OrderId: +$(".order-id").val()
+    };
+
+     $(".spinner").show();
+     $(".checkout-btn").hide();
+
+    $.ajax({
+    type: "POST",
+    url: "/CheckCartForMissingQuantitites",
+    data: JSON.stringify(model),
+    dataType: "json",
+    success: function (response) {
+    window.location.href = "/Checkout";
+    },
+    error: function (event, jqxhr, settings, thrownError) {
+        if (event.status != 200) {
+            Swal.fire(
+                'Error!',
+                event.responseText.split(': ')[1].split("\r\n")[0],
+                'error'
+            );
+
+             $(".spinner").hide();
+             $(".checkout-btn").show();
+        }
+       }
+    });
+});
+
+$(".apply-discount-btn").on("click", function(){
+  const { value: discountCode } = Swal.fire({
+  title: "Enter a discount code",
+  input: "text",
+  inputLabel: "Discount code:",
+  showCancelButton: true,
+  inputValidator: (value) => {
+    if (!value) {
+      return "You need to write something!";
+    }else{
+        applyCode(value);
+        return `Applying code '${value}'. Please wait`
+    }
+  }
+});
+});
+
+function applyCode(discountCode){
+    let model = {
+        OrderId: +$(".order-id").val(),
+        DiscountCode : discountCode,
+    };
+
+    $.ajax({
+    type: "POST",
+    url: "/ApplyDiscountCode",
+    data: JSON.stringify(model),
+    dataType: "json",
+    success: function (response) {
+
+     Swal.fire(
+                'Success!',
+                `Discount Code '${discountCode} applied succesfully!'`,
+                'success'
+            ).then(() => window.location.reload());
+    },
+    error: function (event, jqxhr, settings, thrownError) {
+        if (event.status != 200) {
+            Swal.fire(
+                'Error!',
+                event.responseText.split(': ')[1].split("\r\n")[0],
+                'error'
+            );
+        }
+       }
+    });
+    console.log(discountCode);
+}
+
+$(".change-quantity-btn").on("click", function(){
+    const t = $(this);
+    const tr = t.closest("tr");
+
+     const quantityHolder = tr.find(".quantity-holder");
+
+    if(t.hasClass('delete-btn')){
+        quantityHolder.text(0);
+    }else{
+        quantityHolder.text(
+        eval(quantityHolder.text() + t.text() + 1));
+    }
+
+    updateQuantity(tr)
+});
+
+$(".external-open").on("click", function(){
+    const productId = $(this).attr("data-product-id");
+
+    window.open(`/Product/${productId}`, "_blank");
+});
+
+$(".review-btn").on("click", function(){
+    const orderItemId = $(this).attr("data-order-item-id");
+
+    window.open(`/AddReview/${orderItemId}`, "_blank");
+});
+
+function recalculatePrices(){
+    let orderTotal = 0;
+    $("tbody tr").not(".total-tr").each((i, tr)=>{
+    tr = $(tr);
+
+    const price = parseFloat(tr.find(".price").text());
+    const quantity = +tr.find(".quantity-holder").text();
+    const totalItemPrice = price * quantity;
+
+    tr.find(".subtotal").text(`${totalItemPrice.toFixed(2)} $`)
+    
+    orderTotal += totalItemPrice;
+    });
+
+    $(".total-price").text(orderTotal.toFixed(2));
+}
+
+function updateQuantity(tr){
+    let model = {
+        ProductId: +tr.find(".product-id").val(),
+        Quantity: +tr.find(".quantity-holder").text(),
+        OrderId: +$(".order-id").val()
+    };
+
+    $.ajax({
+    type: "POST",
+    url: "/ChangeCartItemQuantity",
+    data: JSON.stringify(model),
+    dataType: "json",
+    success: function (response) {
+
+    if(model.Quantity == 0) {
+        // if($(".tr").not(".total-tr").length == 0) $(".total-tr").hide();
+        tr.remove();
+    }
+
+     toastr.success('Cart updated successfully!', 'Success');
+
+     recalculatePrices();
+    },
+    error: function (event, jqxhr, settings, thrownError) {
+        if (event.status != 200) {
+            Swal.fire(
+                'Error!',
+                event.responseText.split(': ')[1].split("\r\n")[0],
+                'error'
+            );
+        }
+       }
+    });
+}
+</script>

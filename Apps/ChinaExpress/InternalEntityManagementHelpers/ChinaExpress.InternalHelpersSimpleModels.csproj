@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChinaExpress.ComplexModelsWithHelperReferences\ChinaExpress.ComplexModelsWithHelperReferences.csproj" />
+    <ProjectReference Include="..\ChinaExpress.DatabaseModels\ChinaExpress.SimpleEntityModels.csproj" />
+    <ProjectReference Include="..\ChinaExpress.Extensions\ChinaExpress.Extensions.csproj" />
+  </ItemGroup>
+
+</Project>

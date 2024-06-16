@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<style>
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+</style>
+
+<section class="page-content align-items-center">
+    <div class="welcome-msg text-center">
+        <h2 class="text-bold">Welcome to China Express!</h2>
+    </div>
+    <div class="promotion-banner d-flex justify-content-evenly">
+        <img src="~/images/promotion-banner.jpg" alt="" class="d-flex w-60">
+        
+        <div class="discounts-cta bg-secondary d-flex flex-column align-items-center">
+            <span class="text-bold text-white mt-2" style="font-size: 20px">
+                <i class="fa-solid fa-ticket"></i> 
+                Win a DISCOUNT 
+                <i class="fa-solid fa-ticket"></i>
+            </span>
+            
+            <p class="mt-2 text-white" style="font-size: 20px">Every 10th person wins!</p>
+
+            <img src="https://i.ibb.co/hgtJMSh/pngtree-special-discount-banner-png-image-1517593-removebg-preview.png" style="width: 190px"/>
+            
+            <a class="btn btn-success" asp-area="" asp-page="/CouponGame">PLAY</a>
+        </div>
+    </div>
+    
+    <div class="categories-section mt-5 mb-5">
+        <div class="d-flex justify-content-center">
+            @foreach (var category in Model.CategoryCards)
+            {
+                <a class="d-flex flex-column align-items-center cursor-pointer" style="flex-basis: 20%; text-decoration: none; color: var(--dark-blue)" href="/Products?category=@category.Id">
+                    <img class="" src="@category.ImgUrl" style="border-radius: 50%; width: 150px; height: 150px"/>
+                    <span class="text-bold mt-3">@category.Name</span>
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="items-section">
+        <div class="items d-flex justify-content-center">
+            @foreach (var product in Model.ProductCards)
+            {
+                @await Component.InvokeAsync("ProductCard", product)
+            }
+        </div>
+    </div>
+</section>

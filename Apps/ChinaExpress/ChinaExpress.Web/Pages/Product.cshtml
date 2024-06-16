@@ -1,0 +1,241 @@
+﻿@page "/Product/{id:int}"
+@model ChinaExpress.Web.Pages.ProductModel
+@{
+    ViewData["Title"] = "Product";
+
+    var totalWithoutCombo = Extensions.Extensions.Sum(Model.ComboBoxItems, cbi => cbi.GetPrice());
+}
+
+<link rel="stylesheet" href="~/css/product.css" asp-append-version="true" />
+
+
+<section class="page-content align-items-center">
+    <input type="hidden" class="product-id" value="@Model.Product.ProductId"/>
+    <div class="d-flex top-item-info-div justify-content-around flex-wrap m-3 align-items-center">
+        <div class="img-holder fb-30 ">
+            <img class="product-img" style="width: 300px !important;object-fit:contain;height: 300px;" src="@Model.Product.PhotoUrl"/>
+        </div>
+        <div class="d-flex flex-column fb-30 ">
+            <span class="title-div mb-1 text-bold text-center">
+                @Model.Product.Name
+            </span>
+            <hr/>
+            <span class="description text-center">@Model.Product.Description</span>
+                <span class="text-center">
+                    @if (Model.Product.Rating > 0)
+                    {
+                        <br/>
+                        <span>Rating: @(Model.Product.Rating.ToString("f1")) /5
+                            <span class="card-stars">
+                                @Html.Raw(Model.GetStars(Model.Product.Rating))
+                            </span>
+                        </span>
+                        <br>
+                    }
+                </span>
+            <hr/>
+            @if (Model.Product.Category.Features.Any())
+            {
+                <div class="">
+                    <h4>Select features (Optional)</h4>
+                    @foreach (var feature in Model.Product.Category.Features)
+                    {
+                        <div>
+                            <h4 class="text-bold">@feature.Name</h4>
+                            <div class="d-flex flex-wrap">
+                                @foreach (var featureTag in feature.Tags)
+                                {
+                                    <div class="p-2 feature-tag">@featureTag</div>
+                                }
+                            </div>
+
+                            <hr/>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        <div class="shipping p-2 text-center fb-30 d-flex flex-column">
+            <span>Ship To <span class="current-city text-bold">Eindhoven</span></span>
+            <hr/>
+            <span class="text-success text-bold">Free Shipping</span>
+            <span class=" text-bold">Delivered by <span class="text-success">@DateTime.Now.AddDays(3).ToString("MMM dd")</span></span>
+            <hr/>
+            <span>
+                <span class="actual-price text-bold">@Model.Product.GetPrice().ToString("f2") $</span>
+                <span class="fake-price">@((Model.Product.GetPrice() * 1.35m).ToString("f2")) $</span>
+                
+                <br/>
+                <input class="remaining-quantity" type="hidden" value="@Model.Product.GetQuantity()"/>
+                <span class="quantity-left text-bold">Only @Model.Product.GetQuantity() left!</span>
+               
+                @if (@User.Identity?.IsAuthenticated ?? false)
+                {
+                    <br/>
+                    <span class="text-bold">Quantity:</span>
+                    <br/>
+                    <i class="fa-solid fa-circle-minus text-danger"></i> 
+                    <span class="quantity text-bold"> 1 </span> 
+                    <i class="fa-solid fa-circle-plus text-success"></i>
+                    <br/>
+
+                    <div class="spinner-border spinner" style="display: none" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+
+                    <button type="button" class="btn add-btn">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <b> Add to Cart </b>
+                    </button>
+                }
+
+                
+            </span>
+            </div>
+    </div>
+    <div>
+        @if (Model.Product.GetReviews().Any())
+        {
+            <div class="title-div mb-1 text-center text-bold">
+                Reviews
+            </div>
+
+            <div class="reviews-holder">
+                @foreach (var review in Model.Product.GetReviews())
+                {
+                    <p><span style="color: #ffa700">@Html.Raw(Model.GetStars(review.Stars)) </span> By: @($"{review.User}")</p>
+                    <p class="p-0 m-0">@review.Description</p>
+                    <hr/>
+                }
+            </div>
+        }
+    </div>
+
+    <div>
+        @if (Model.ComboBoxItems.Any())
+        {
+            <h3 class="text-center">Items in this box: </h3>
+            <h5 class="text-center">Total without combo: @totalWithoutCombo $</h5>
+
+            <table class="table table-striped w-50 m-auto ligh-shadow">
+                <thead class="thead-custom">
+                <tr class="text-center">
+                    <th scope="col">Image</th>
+                    <th scope="col">Details</th>
+                    <th scope="col" class="w-15">Normal Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.ComboBoxItems)
+                {
+                    <tr>
+                        <td>
+                            <img class="card-image card-iamge-small" src="@item.PhotoUrl"/>
+                        </td>
+                        <td class="d-flex flex-column">
+                            <span class="text-bold">
+                                @item.Name
+                            </span>
+                            <span>@item.Description</span>
+                        </td>
+                        <th class="w-15 text-center">
+                            <span class="price">$ @item.GetPrice()</span>
+                        </th>
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+</section>
+
+<script>
+    const apiKey = JSON.parse('@Html.Raw(@Json.Serialize(ProductModel.IPDataKey))');
+    const apiUrl = `https://api.ipdata.co?api-key=${apiKey}`;
+
+        async function getCity() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+
+                const data = await response.json();
+               $(".current-city").text(data.city);
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        getCity();
+
+$(".add-btn").on("click", function(){
+
+    $(".spinner").show();
+    $(".add-btn").hide();
+
+    let model = JSON.stringify({
+        ProductId: +$(".product-id").val(),
+        Quantity: +quantityInput.text(),
+        SelectedTags: $('.selected-feature-tag').map(function() { return $(this).text(); }).get(),
+    });
+
+    $.ajax({
+    type: "POST",
+    url: "/AddItemToCart",
+    data: model,
+    dataType: "json",
+    success: function (response) {
+    $(".spinner").hide();
+    $(".add-btn").show();
+
+        Swal.fire(
+            'Success!',
+            'Successfully added to the cart!',
+            'success'
+        ).then(() => window.location.href = '/Order');
+    },
+    error: function (event, jqxhr, settings, thrownError) {
+        if (event.status != 200) {
+            $(".spinner").hide();
+            $(".add-btn").show();
+
+            Swal.fire(
+                'Error!',
+                event.responseText.split(': ')[1].split("\r\n")[0],
+                'error'
+            );
+        }
+       }
+    });
+});
+
+const maxQuanty = +$(".remaining-quantity").val();
+const quantityInput = $(".quantity");
+
+$(document).on("click",".fa-circle-plus", function(){
+    const currentQuantity = +quantityInput.text();
+
+    if(currentQuantity < maxQuanty) quantityInput.text(currentQuantity + 1);
+});
+$(document).on("click",".fa-circle-minus", function(){
+     const currentQuantity = +quantityInput.text();
+
+    if(currentQuantity > 1) quantityInput.text(currentQuantity - 1);
+});
+
+$(document).on("click", ".feature-tag", function(){
+    const t = $(this);
+    const selectedClass = "selected-feature-tag";
+
+    if(t.hasClass(selectedClass)){
+        t.removeClass(selectedClass);
+    }else{
+        const otherSelctedTagsInCurrentDiv = t.closest(".d-flex").find(`.${selectedClass}`);
+        if(otherSelctedTagsInCurrentDiv.length != 0) otherSelctedTagsInCurrentDiv.removeClass(selectedClass); //One possible choice
+
+        t.addClass(selectedClass);
+    }
+});
+</script>

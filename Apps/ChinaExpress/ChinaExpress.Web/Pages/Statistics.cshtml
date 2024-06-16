@@ -1,0 +1,177 @@
+﻿@page
+@model ChinaExpress.Web.Pages.StatisticsModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<style>
+    .card{
+        font-size: 25px;
+        justify-content:center;
+        align-items:center;
+    }
+
+    .graph-title{
+        font-size: 30px;
+    }
+
+    .container{
+        max-width: unset !important;
+    }
+</style>
+
+<section class="page-content">
+    
+    <input type="hidden" class="most-popular-data" value="@Json.Serialize(Model.MostPopularItems)"/>
+
+    <h1 class="text-center mb-3">Admin Statistics
+        <a class="btn btn-danger text-center ml-1" href="/Statistics?shouldIgnoreCache=true">Forget Cache</a>
+    </h1>
+
+    <div>
+        <div class="d-flex justify-content-around">
+            <div class="left fb-45 d-flex flex-wrap justify-content-center" style="gap: 2em;">
+                <article class="card p-2 fb-45 bg-primary ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Users: </p>
+                    <p class="card-content">
+                        <i class="fas fa-users"></i> @Model.UsersCount
+                    </p>
+                </article>
+                <article class="card p-2 fb-45 bg-secondary ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Products: </p>
+                    <p class="card-content">
+                        <i class="fa-solid fa-dolly"></i> @Model.ProductsCount
+                    </p>
+                </article>
+                <article class="card p-2 fb-45 bg-info ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Orders:</p>
+                    <p class="card-content">
+                        <i class="fa-solid fa-basket-shopping"></i> @Model.OrdersCount
+                    </p>
+                </article>
+                <article class="card p-2 fb-45 bg-success ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Total profit:</p>
+                    <p class="card-content">
+                        <i class="fa-solid fa-money-bill-trend-up"></i> @Model.TotalProfit.ToString("f2") $
+                    </p>
+                </article>
+                <article class="card p-2 fb-45 bg-warning ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Reviews:</p>
+                    <p class="card-content">
+                        <i class="fa-solid fa-star"></i> @Model.ReviewsCount
+                    </p>
+                </article>
+                <article class="card p-2 fb-45 bg-danger ligh-shadow text-white" tabindex="0">
+                    <p class="card-title">Items Views:</p>
+                    <p class="card-content">
+                        <i class="fa-solid fa-eye"></i> @Model.ViewsCount
+                    </p>
+                </article>
+
+            </div>
+            <div class="right d-flex flex-wrap justify-content-center w-30">
+                <p class="text-bold graph-title">Sold items from categories</p>
+                <canvas id="categoriesSellsPieCart" class="bg-white ligh-shadow"></canvas>
+            </div>
+        </div>
+        <div class="mt-5 d-flex justify-content-around">
+            <div class="left fb-45 d-flex flex-wrap justify-content-center">
+
+                <p class="text-bold graph-title">5 Most Popular items (by views)</p>
+                <canvas id="mostPopularItemsBarChart" class="bg-white ligh-shadow"></canvas>
+            </div>
+            <div class="right fb-45 d-flex flex-wrap justify-content-center">
+                <p class="text-bold graph-title">Last 10 Profit Records</p>
+                <canvas id="profitsLineChart" class="bg-white ligh-shadow"></canvas>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+function generateMostPopularItemsGraph(){
+var mostPopularItemsKVP = JSON.parse('@Html.Raw(@Json.Serialize(Model.MostPopularItems))');
+var mostPopularItemsChart = document.getElementById('mostPopularItemsBarChart').getContext('2d');
+
+var barData = {
+    labels: mostPopularItemsKVP.map(kvp=>kvp.key),
+    datasets: [{
+      label: 'Views',
+      data: mostPopularItemsKVP.map(kvp=>kvp.value),
+      backgroundColor: '#002D3D', 
+      borderColor: 'rgba(54, 162, 235, 1)', 
+      borderWidth: 1
+    }]
+  };
+
+  var barOptions = {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  var barChart = new Chart(mostPopularItemsChart, {
+    type: 'bar',
+    data: barData,
+    options: barOptions
+  });
+}
+
+function generateCategoriesSalesChart(){
+    var salesPerCategoryKVP = JSON.parse('@Html.Raw(@Json.Serialize(Model.SalesPerCatgory))');
+    var categoriesSellsPieCart = document.getElementById('categoriesSellsPieCart').getContext('2d');
+
+    var data = {
+    labels: salesPerCategoryKVP.map(kvp => kvp.key),
+    datasets: [{
+      label: 'Sales per category',
+      data: salesPerCategoryKVP.map(kvp => kvp.value),
+      borderWidth: 1
+    }]
+  };
+
+  var myPieChart = new Chart(categoriesSellsPieCart, {
+    type: 'pie',
+    data: data,
+  });
+}
+
+function generateLast10OrderRecordsChart(){
+    var lastTenOrderRecordsKVP = JSON.parse('@Html.Raw(@Json.Serialize(Model.LastTenOrderRecords))');
+    var profitsLineChart = document.getElementById('profitsLineChart').getContext('2d');
+
+  var lineData = {
+    labels: lastTenOrderRecordsKVP.map(kvp => kvp.key),
+    datasets: [{
+      label: 'Profit',
+      data: lastTenOrderRecordsKVP.map(kvp => kvp.value),
+      borderColor: 'rgba(255, 99, 132, 1)', 
+      borderWidth: 2,
+      fill: false
+    }]
+  };
+
+  var lineOptions = {
+    scales: {
+      y: {
+        beginAtZero: false
+      }
+    }
+  };
+
+  var lineGraph = new Chart(profitsLineChart, {
+    type: 'line',
+    data: lineData,
+    options: lineOptions
+  });
+}
+</script>
+
+<script>
+ generateMostPopularItemsGraph();
+ generateCategoriesSalesChart();
+ generateLast10OrderRecordsChart();
+</script>

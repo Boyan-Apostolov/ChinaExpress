@@ -1,0 +1,57 @@
+﻿@page
+@model ChinaExpress.Web.Pages.CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+<style>
+.item-holder{
+    box-shadow: 7px 18px 66px -17px rgba(0,45,61,1);
+
+}
+</style>
+<section class="page-content">
+    <form method="post">
+        <input type="hidden" asp-for="CheckoutDto.OrderId" value="@Model.CheckoutDto.OrderId"/>
+        <div class="bg-white w-30 m-auto mt-3 p-3 item-holder d-flex flex-column align-items-center justify-content-center">
+            <input type="hidden" class="program-message" value="@Model.CheckoutDto.ProgramMessage"/>
+            <h1 class="text-bold">Checkout</h1>
+            <hr/>
+            
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+
+            <span>Total Order Price: <span class="text-bold">@(Model.CheckoutDto.TotalPrice.ToString("F2")) $</span></span>
+            <hr/>
+
+            <span>Ordered items: <span class="text-bold">@Model.CheckoutDto.TotalItems</span></span>
+            <hr/>
+
+            <label>Delivery Address:</label>
+            <span asp-validation-for="CheckoutDto.DeliveryAddress" class="text-danger"></span>
+
+            <textarea class="form-control w-75 address-input" asp-for="CheckoutDto.DeliveryAddress" placeholder="Country, City, Street, Post code"></textarea>
+            <hr/>
+
+            <button class="btn btn-success pay-btn" type="submit">
+                <i class="fa-solid fa-credit-card mr-1"></i>
+                <span>Pay @(Model.CheckoutDto.TotalPrice.ToString("F2")) $</span>
+            </button>
+        </div>
+    </form>
+</section>
+
+<partial name="_ValidationScriptsPartial"/>
+
+<script>
+    const programMsg = $(".program-message").val();
+    if(programMsg.length != 0){
+        $("form").hide();
+
+        Swal.fire(
+            'Success!',
+            programMsg,
+            'success'
+        ).then(() => window.location.href = '/Index');
+    }
+   
+</script>

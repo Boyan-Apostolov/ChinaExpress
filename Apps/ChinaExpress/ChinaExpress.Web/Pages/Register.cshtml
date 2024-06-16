@@ -1,0 +1,79 @@
+﻿@page
+@model ChinaExpress.Web.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+<section class="page-content">
+    
+    @if (!string.IsNullOrWhiteSpace(Model.FormData.Message))
+    {
+        <div class="alert alert-danger w-50 m-auto" role="alert">
+            @Model.FormData.Message
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" asp-for="FormData.Message">
+        <input type="hidden" asp-for="FormData.ReferralUserId">
+        <div class="wrapper">
+            <div class="login-logo">
+                <img src="~/images/logo.png" alt="">
+            </div>
+            <div class="text-center mt-4 name">
+                Register
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.ReferralUserName))
+            {
+                <div class="text-center mt-4">
+                    You will receive <span class="text-bold">100 points</span> for supporting <span class="text-bold">@Model.ReferralUserName</span>  ! 
+                </div>
+            }
+            <div class="p-3 mt-3">
+                <span asp-validation-for="FormData.FirstName" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="far fa-user"></span>
+                    <input type="text" asp-for="FormData.FirstName" placeholder="First Name">
+                </div>
+                
+                <span asp-validation-for="FormData.LastName" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="far fa-user"></span>
+                    <input type="text" asp-for="FormData.LastName" placeholder="Last Name">
+                </div>
+                
+                <span asp-validation-for="FormData.Email" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="far fa-envelope"></span>
+                    <input type="text" asp-for="FormData.Email" placeholder="Email">
+                </div>
+                
+                <span asp-validation-for="FormData.Phone" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-phone"></span>
+                    <input type="text" asp-for="FormData.Phone" placeholder="Phone">
+                </div>
+                
+                <span asp-validation-for="FormData.Password" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-key"></span>
+                    <input type="password" asp-for="FormData.Password" placeholder="Password">
+                </div>
+                
+                <span asp-validation-for="FormData.Password" class="text-danger"></span>
+                <div class="form-field d-flex align-items-center">
+                    <span class="fas fa-key"></span>
+                    <input type="password" asp-for="FormData.RepeatPassword" placeholder="RepeatPassword">
+                </div>
+
+                <button class="btn mt-3" type="submit">Register</button>
+            </div>
+            <div class="text-center fs-6">
+                <a asp-area="" asp-page="/Login">Login</a>
+            </div>
+        </div>
+    </form>
+</section>
+
+<partial name="_ValidationScriptsPartial"/>

@@ -1,0 +1,82 @@
+﻿.image-container {
+    display: flex;
+    justify-content: space-around;
+    width: 70%;
+    position: relative;
+    background: linear-gradient(90deg, rgba(213, 113, 40, 0.6) 0%, rgba(117, 28, 171, 0.9) 100%) !important;
+    border-radius: 12px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+    .image-container img {
+        width: 200px;
+        height: auto;
+        transition: transform 0.5s;
+    }
+
+.shuffling-1 {
+    animation: shuffle1 1s ease-in-out infinite;
+}
+
+.shuffling-2 {
+    animation: shuffle2 1s ease-in-out infinite;
+}
+
+.shuffling-3 {
+    animation: shuffle3 1s ease-in-out infinite;
+}
+
+@keyframes shuffle1 {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(160px);
+    }
+
+    50% {
+        transform: translateX(-50px);
+    }
+
+    75% {
+        transform: translateX(160px);
+    }
+}
+
+@keyframes shuffle2 {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-160px);
+    }
+
+    50% {
+        transform: translateX(160px);
+    }
+
+    75% {
+        transform: translateX(-160px);
+    }
+}
+
+@keyframes shuffle3 {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(50px);
+    }
+
+    50% {
+        transform: translateX(-240px);
+    }
+
+    75% {
+        transform: translateX(60px);
+    }
+}

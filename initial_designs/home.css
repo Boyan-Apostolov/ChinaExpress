@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Anta&display=swap");
+
+body {
+  font-family: "Anta", sans-serif !important;
+  background-color: var(--light-cyan) !important;
+
+  --dark-blue: #002D3D;
+  --light-blue: #005c81;
+  --light-cyan: #b7dede;
+  --action-red: #ba1b26
+}
+nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+header img {
+  width: 50px;
+  border-radius: 50%;
+}
+
+header {
+  background-color: var(--dark-blue);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding: 5px 15px 5px 15px;
+}
+
+.page-content {
+  padding-top: 20px;
+  color: var(--dark-blue);
+}
+
+.promotion-banner img {
+  padding-top: 10px;
+  margin: 0 auto;
+}
+
+.items-section {
+  padding-top: 10px;
+  padding-left: 5%;
+  margin-bottom: 60px;
+}
+
+.items {
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.items div {
+  flex-basis: 20%;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--dark-blue);
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.card-price {
+  font-weight: bold;
+  float: right;
+}
+
+.card-stars {
+  color: #a5a810;
+}
+
+
+.card-title{
+  font-weight: 400;
+}

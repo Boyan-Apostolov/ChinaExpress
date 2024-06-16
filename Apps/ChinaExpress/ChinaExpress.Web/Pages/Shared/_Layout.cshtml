@@ -1,0 +1,148 @@
+﻿@using ChinaExpress.Logic
+@using ChinaExpress.SimpleEntityModels.Enums
+@inject IOrdersManager OrdersManager;
+
+@{
+    var userIsLoggedIn = User.Identity?.IsAuthenticated ?? false;
+    var itemsInUserCart = userIsLoggedIn 
+        ? OrdersManager.GetOrCreateUserDraftOrder(int.Parse(User.FindFirst("Id").Value)).GetOrderItems().Count
+    : 0;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ChinaExpress</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/ChinaExpress.styles.css" asp-append-version="true" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+<div class="overlay" id="overlay">
+    <div id="loader"></div>
+</div>
+
+<header class="">
+    <div class="d-flex justify-content-evenly navigation-1">
+        <span><i class="fa-solid fa-truck-fast"></i> FREE DELIVERY</span>
+        <span><i class="fa-solid fa-ticket"></i> WEEKLY COUPONS</span>
+        <span><i class="fa-solid fa-medal"></i> BEST PRICES</span>
+    </div>
+    <div class="navigation-2 d-flex align-items-center justify-content-between">
+        <div>
+            <a href="/" style="text-decoration: none;">
+                <img src="~/images/logo.png" alt="" class="logo">
+                <span style="margin-left: 15px;">China Express</span>
+            </a>
+        </div>
+        <nav class="d-flex justify-content-evenly w-40">
+            <div class="d-flex search-holder">
+                <a class="nav-link search-btn" href="#"><i class="fas fa-search"></i></a>
+                <input type="text" class="nav-search" placeholder="Search..."/>
+            </div>
+            <a class="nav-link" asp-area="" asp-page="/Products">Products</a>
+            @if (@userIsLoggedIn)
+            {
+                if (User.IsInRole(UserRole.Employee.ToString()))
+                {
+                    <a class="nav-link" asp-area="" asp-page="/Statistics"><i class="fa-solid fa-chart-pie"></i> Statistics </a>
+                }
+                
+                <a class="nav-link" asp-area="" asp-page="/Order">
+                    <i class="fa-solid fa-basket-shopping mr-2"></i>
+                    <span class="custom-badge">@itemsInUserCart</span>
+                </a>
+
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="nav-link" href="/Products?recommendationMode=true">Recommendation</a>
+                        <a class="dropdown-item" asp-area="" asp-page="/MyOrders">Order History</a>
+                        <a class="dropdown-item" asp-area="" asp-page="/Referrals">Referrals</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-area="" asp-page="/Logout">Logout</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a class="nav-link" asp-area="" asp-page="/Login">Login</a>
+                <a class="nav-link" asp-area="" asp-page="/Register">Register</a>
+            }
+
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-white text-center">
+    <div class="container">
+        &copy; China Express 2024 - Developed by Boyan Apostolov, Fontys UAS
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script>
+    function initialSearch(){
+        window.location.href = `/Products?keyword=` + $(".nav-search").val();
+    }
+
+    $(".search-btn").on("click", initialSearch);
+$(".nav-search").on("keypress", function(e){
+    if (e.which == 13) {
+      initialSearch();
+    }
+});
+</script>
+<script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "500",
+            "timeOut": "3000",
+            "extendedTimeOut": "500",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    </script>

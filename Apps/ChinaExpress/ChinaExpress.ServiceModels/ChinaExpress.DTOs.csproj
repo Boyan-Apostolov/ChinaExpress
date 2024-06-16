@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChinaExpress.ComplexEntityModels\ChinaExpress.ComplexModelsWithoutHelperReferences.csproj" />
+    <ProjectReference Include="..\ChinaExpress.DatabaseModels\ChinaExpress.SimpleEntityModels.csproj" />
+  </ItemGroup>
+
+</Project>

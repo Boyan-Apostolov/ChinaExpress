@@ -1,0 +1,62 @@
+﻿@page "/AddReview/{orderItemId:int}"
+
+@model ChinaExpress.Web.Pages.AddReviewModel
+@{
+    this.ViewData["Title"] = "Add review";
+}
+
+
+<style>
+.review-box{
+    box-shadow: 7px 18px 66px -17px rgba(0,45,61,1);
+    margin-top: 15px !important;
+
+}
+</style>
+
+<section class="page-content align-items-center m-auto">
+    <div class="bg-white w-60 p-5 pt-1 review-box m-auto">
+        <br/>
+        <h2 class="text-center">@this.ViewData["Title"]</h2>
+        <br/>
+        <div class="justify-content-center align-content-center">
+            <form class="justify-content-center text-center align-items-center" method="post">
+                <input type="hidden" asp-for="@Model.ReviewInfo.Stars" id="overallId"/>
+                <input type="hidden" asp-for="@Model.ReviewInfo.OrderItemId"/>
+                <input type="hidden" asp-for="@Model.ReviewInfo.UserId"/>
+                <div class="form-group">
+                    <div class="row justify-content-center">
+                        <h3>&nbsp;Rating: &nbsp; </h3>
+                        <ul class="list-unstyled text-center">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <li class="fas fa-star btn-outline-warning" data-vote-overall="@i"></li>
+                            }
+                            <li><span id="overallVote">@Model.ReviewInfo.Stars</span><span> / 5</span> </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group mb-5">
+                    <div>
+                        <h3>Review description:</h3>
+                        <textarea class=" form-control" asp-for="@Model.ReviewInfo.Description" rows="5" placeholder="Awesome product..."></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">Confirm</button>
+            </form>
+        </div>
+    </div>
+    
+</section>
+
+@section Scripts {
+    <script>
+        $("li[data-vote-overall]").each(function (el) {
+            $(this).click(function () {
+                var value = $(this).attr("data-vote-overall");
+                $('#overallId').val(value);
+                $('#overallVote').html(value);
+            })
+        });
+    </script>
+}

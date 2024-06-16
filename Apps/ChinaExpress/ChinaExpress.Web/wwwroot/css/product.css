@@ -1,0 +1,53 @@
+﻿
+.title-div {
+    font-size: 25px;
+}
+
+.description {
+    font-size: 18px;
+}
+
+.shipping {
+    font-size: 20px;
+    background-color: #C9F3F3;
+    border-radius: 12px;
+    padding 10px;
+}
+
+hr {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.actual-price {
+    font-size: 30px;
+    color: rgba(213, 113, 40, 1);
+}
+
+.quantity-left {
+    color: rgba(213, 113, 40, 1);
+}
+
+.add-btn {
+    border-radius: 20px;
+    color: white;
+    background-color: rgba(213, 113, 40, 1);
+    margin-top: 10px;
+}
+
+.fake-price {
+    text-decoration: line-through;
+}
+
+.reviews-holder {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 300px !important;
+    background-color: #C9F3F3;
+    padding: 10px 20px;
+    border-radius: 12px;
+}
+
+tbody td {
+    height: 150px;
+}

@@ -1,0 +1,30 @@
+﻿@model ChinaExpress.DTOs.ProductCardDto
+
+<div class="card ligh-shadow" style="width: 18rem;">
+    <img class="card-img-top card-image" src="@Model.PhotoUrl" alt="Card image cap">
+    <div class="card-body">
+        <div>
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">
+                <span class="card-details">@Model.Description</span>
+                <div class="d-flex justify-content-between">
+                    <span class="card-stars">
+                        @if (Model.Rating > 0)
+                        {
+                            @for (var i = 1; i <= Math.Floor(Model.Rating); i++)
+                            {
+                                <i class="fa-solid fa-star"></i>
+                            }
+
+                            <span>@(Model.Rating.ToString("f1")) /5</span>;
+                        }
+                    </span>
+                </div>
+            </p>
+        </div>
+        <div>
+            <span class="card-price">@Model.Price</span>
+            <a class="btn btn-primary w-100" href="/Product/@Model.Id">View</a>
+        </div>
+    </div>
+</div>
